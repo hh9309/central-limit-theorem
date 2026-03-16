@@ -1,10 +1,13 @@
-name: Deploy to GitHub Pages
+name: Deploy dist to main
 
-# 触发条件：每次 push 到 main 分支
+# 每次 push main 分支触发
 on:
   push:
     branches:
       - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # 强制使用 Node.js 24
 
 jobs:
   build-and-deploy:
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '24'
 
       # 3️⃣ 安装依赖
       - name: Install dependencies
@@ -29,11 +32,13 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 5️⃣ 部署 dist 到 gh-pages
-      - name: Deploy to GitHub Pages
+      # 5️⃣ 部署 dist 到 main 分支根目录
+      - name: Deploy to main branch
         uses: peaceiris/actions-gh-pages@v6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist        # 构建输出目录
+          publish_branch: main        # 指定部署到 main 分支
+          publish_dir: ./dist         # dist 文件夹
           user_name: 'github-actions'
           user_email: 'github-actions@github.com'
+          commit_message: "Deploy dist via GitHub Actions"
