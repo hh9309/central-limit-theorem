@@ -1,0 +1,44 @@
+name: Deploy dist to main
+
+# 每次 push main 分支触发
+on:
+  push:
+    branches:
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # 强制使用 Node.js 24
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ 拉取仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '24'
+
+      # 3️⃣ 安装依赖
+      - name: Install dependencies
+        run: npm ci
+
+      # 4️⃣ 构建项目 (生成 dist)
+      - name: Build project
+        run: npm run build
+
+      # 5️⃣ 部署 dist 到 main 分支根目录
+      - name: Deploy to main branch
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: main        # 指定部署到 main 分支
+          publish_dir: ./dist         # dist 文件夹
+          user_name: 'github-actions'
+          user_email: 'github-actions@github.com'
+          commit_message: "Deploy dist via GitHub Actions"
