@@ -1,0 +1,6 @@
+{
+  "name": "中心极限定理与高斯涌现智能实验室",
+  "description": "探讨中心极限定理本质、总体偏度对正态收敛速度影响的交互式实验室，破除 n>=30 绝对化误区。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
