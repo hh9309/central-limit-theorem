@@ -106,9 +106,9 @@ export const DiagnosticBreakdown: React.FC<DiagnosticBreakdownProps> = ({
               className="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg cursor-pointer"
             />
             <div className="flex justify-between text-[11px] text-slate-400 font-mono">
-              <span>n = 1 (粗糙原始分布)</span>
-              <span>n = 30 (传统经验准则)</span>
-              <span>n = 200 (极高精拟合)</span>
+              <span><MathFormula tex="n = 1" /> (粗糙原始分布)</span>
+              <span><MathFormula tex="n = 30" /> (传统经验准则)</span>
+              <span><MathFormula tex="n = 200" /> (极高精拟合)</span>
             </div>
           </div>
         </div>

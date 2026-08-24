@@ -105,6 +105,35 @@ export const PythonSandbox: React.FC = () => {
     }
   };
 
+  const getPythonSingleSampleGenCode = (dist: DistributionType) => {
+    switch (dist) {
+      case 'uniform':
+        return 'raw_sample = np.random.uniform(0, 1, n)';
+      case 'binomial':
+        return 'raw_sample = np.random.binomial(n=10, p=0.5, size=n)';
+      case 'poisson':
+        return 'raw_sample = np.random.poisson(lam=3.0, size=n)';
+      case 'geometric':
+        return 'raw_sample = np.random.geometric(p=0.3, size=n)';
+      case 'bernoulli_skewed':
+        return 'raw_sample = np.random.binomial(n=1, p=0.1, size=n)';
+      case 'exponential':
+        return 'raw_sample = np.random.exponential(2.0, n)';
+      case 'pareto':
+        return 'raw_sample = (np.random.pareto(a=3.0, size=n) + 1) * 1.5';
+      case 'lognormal':
+        return 'raw_sample = np.random.lognormal(mean=0, sigma=0.75, size=n)';
+      case 'bimodal':
+        return 'raw_sample = np.where(np.random.rand(n) < 0.5, np.random.normal(2, 0.6, n), np.random.normal(8, 0.6, n))';
+      case 'asymmetric_bimodal':
+        return 'raw_sample = np.where(np.random.rand(n) < 0.7, np.random.normal(2, 0.6, n), np.random.normal(8, 1.2, n))';
+      case 'tri_mixture':
+        return 'r = np.random.rand(n)\nraw_sample = np.where(r < 0.35, np.random.normal(1, 0.4, n), np.where(r < 0.7, np.random.normal(5, 0.4, n), np.random.normal(9, 0.4, n)))';
+      case 'cauchy':
+        return 'raw_sample = np.random.standard_cauchy(n)';
+    }
+  };
+
   // Code templates
   const pythonCodes: Record<ScriptType, string> = {
     shapiro: `import numpy as np
@@ -124,11 +153,14 @@ ${getPythonDataGenCode(selectedDist)}
 stat_uni, p_uni = stats.shapiro(means_uniform[:500])
 stat_target, p_target = stats.shapiro(means_target[:500])
 
-print(f"=== n={selectedN} 均值分布 Shapiro-Wilk 假设检验报告 ===")
-print(f"1. Uniform U(0,1)  : p-value = {p_uni:.6f} -> {'[Passed] 完美正态' if p_uni > 0.05 else '[Failed] 未完全正态'}")
-print(f"2. {DISTRIBUTIONS[selectedDist].shortName} : p-value = {p_target:.6f} -> {'[Passed] 达成正态近似' if p_target > 0.05 else '[Failed] 拒绝正态假设 (否定 n=30 法则)'}")
-print(f"目标分布残余偏度 (Skewness) : {stats.skew(means_target):.4f}")
-print(f"目标分布残余峰度 (Kurtosis) : {stats.kurtosis(means_target):.4f}")
+uni_status = "[Passed] 完美正态" if p_uni > 0.05 else "[Failed] 未完全正态"
+target_status = "[Passed] 达成正态近似" if p_target > 0.05 else "[Failed] 拒绝正态假设 (否定 n=30 法则)"
+
+print(f"=== n={n} 均值分布 Shapiro-Wilk 假设检验报告 ===")
+print(f"1. Uniform U(0,1)  : p-value = {p_uni:.6f} -> {uni_status}")
+print(f"2. ${DISTRIBUTIONS[selectedDist].shortName} : p-value = {p_target:.6f} -> {target_status}")
+print(f"目标分布残余偏度 (Skewness) : {float(stats.skew(means_target)):.4f}")
+print(f"目标分布残余峰度 (Kurtosis) : {float(stats.kurtosis(means_target)):.4f}")
 `,
     plot: `import numpy as np
 import scipy.stats as stats
@@ -146,10 +178,10 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
 # 子图 1: 频数直方图与高斯包络线
 count, bins, ignored = ax1.hist(sample_means, 30, density=True, alpha=0.6, color='indigo', label='Sample Means')
-mu, std = np.mean(sample_means), np.std(sample_means)
+mu, std = float(np.mean(sample_means)), float(np.std(sample_means))
 pdf = stats.norm.pdf(bins, mu, std)
 ax1.plot(bins, pdf, 'r--', linewidth=2, label=f'N({mu:.2f}, {std:.2f}^2)')
-ax1.set_title(f'Histogram of X̄ (n={n}) - {DISTRIBUTIONS[selectedDist].shortName}')
+ax1.set_title(f'Histogram of X̄ (n={n}) - ${DISTRIBUTIONS[selectedDist].shortName}')
 ax1.legend()
 
 # 子图 2: 正态 Q-Q 图 (Quantile-Quantile Plot)
@@ -164,19 +196,23 @@ import scipy.stats as stats
 
 # Bootstrapping 重抽样检验小样本推断有效性
 n = ${selectedN}
-raw_sample = np.random.exponential(2.0, n)
 B = 5000
 
-# 重抽样
-boot_means = [np.mean(np.random.choice(raw_sample, size=n, replace=True)) for _ in range(B)]
+# 1. 生成单次原始样本 (${DISTRIBUTIONS[selectedDist].name}, n={n})
+${getPythonSingleSampleGenCode(selectedDist)}
 
-# 计算 95% 置信区间
+# 2. 重抽样 B=5000 次计算样本均值分布
+boot_means = [float(np.mean(np.random.choice(raw_sample, size=n, replace=True))) for _ in range(B)]
+
+# 3. 计算 95% 置信区间
 ci_percentile = np.percentile(boot_means, [2.5, 97.5])
-ci_normal = [np.mean(raw_sample) - 1.96 * np.std(raw_sample)/np.sqrt(n),
-             np.mean(raw_sample) + 1.96 * np.std(raw_sample)/np.sqrt(n)]
+sample_mean = float(np.mean(raw_sample))
+sample_std = float(np.std(raw_sample, ddof=1)) if n > 1 else float(np.std(raw_sample))
+ci_normal = [sample_mean - 1.96 * sample_std / np.sqrt(n),
+             sample_mean + 1.96 * sample_std / np.sqrt(n)]
 
-print(f"=== Bootstrapping 非参数重抽样对比分析 (n={n}) ===")
-print(f"原始样本均值: {np.mean(raw_sample):.4f}")
+print(f"=== ${DISTRIBUTIONS[selectedDist].shortName} Bootstrapping 非参数重抽样对比分析 (n={n}) ===")
+print(f"原始样本均值: {sample_mean:.4f}")
 print(f"Bootstrap 95% 分位数置信区间 : [{ci_percentile[0]:.4f}, {ci_percentile[1]:.4f}]")
 print(f"理论正态公式 95% 置信区间     : [{ci_normal[0]:.4f}, {ci_normal[1]:.4f}]")
 print(f"两者区间偏差率 (Skew Divergence) : {abs(ci_percentile[0] - ci_normal[0]):.4f}")
@@ -326,15 +362,21 @@ print(f"两者区间偏差率 (Skew Divergence) : {abs(ci_percentile[0] - ci_nor
                 onChange={(e) => setSelectedDist(e.target.value as DistributionType)}
                 className="w-full p-2 bg-white border border-slate-200 rounded-lg font-medium focus:ring-2 focus:ring-indigo-500 cursor-pointer"
               >
-                <option value="exponential">指数分布 Exp(λ=0.5) [偏度=2.0]</option>
-                <option value="pareto">极值理赔 Pareto(α=3) [偏度=3.8]</option>
-                <option value="uniform">均匀分布 U(0,1) [偏度=0.0]</option>
-                <option value="binomial">二项分布 B(10,0.5) [偏度=0.0]</option>
+                {(Object.keys(DISTRIBUTIONS) as DistributionType[]).map((key) => {
+                  const d = DISTRIBUTIONS[key];
+                  return (
+                    <option key={key} value={key}>
+                      {d.shortName} - {d.name.split(' (')[0]} [偏度: {isNaN(d.skewness) ? '∞' : d.skewness}]
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">指定样本量 n:</label>
+              <label className="font-semibold text-slate-700 block mb-1">
+                指定样本量 <MathFormula tex="n" />:
+              </label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -348,7 +390,7 @@ print(f"两者区间偏差率 (Skew Divergence) : {abs(ci_percentile[0] - ci_nor
                   onClick={() => setSelectedN(30)}
                   className="px-2.5 py-2 bg-slate-200 text-slate-700 rounded font-mono hover:bg-slate-300 cursor-pointer"
                 >
-                  n=30
+                  <MathFormula tex="n=30" />
                 </button>
               </div>
             </div>

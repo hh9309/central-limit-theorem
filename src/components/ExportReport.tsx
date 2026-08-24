@@ -232,15 +232,15 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
-                <span className="text-slate-500">理论偏度 γ₁ / 峰度 γ₂</span>
+                <span className="text-slate-500">理论偏度 <MathFormula tex="\gamma_1" /> / 峰度 <MathFormula tex="\gamma_2" /></span>
                 <div className="text-sm font-mono font-bold text-slate-900">
                   {distInfo.skewness} / {distInfo.kurtosis}
                 </div>
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
-                <span className="text-slate-500">测试样本量 n</span>
-                <div className="text-sm font-mono font-bold text-indigo-600">n = {sampleSize}</div>
+                <span className="text-slate-500">测试样本量 <MathFormula tex="n" /></span>
+                <div className="text-sm font-mono font-bold text-indigo-600"><MathFormula tex={`n = ${sampleSize}`} /></div>
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
@@ -258,15 +258,15 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
-                <span className="text-slate-500">观察均值 E(X̄)</span>
+                <span className="text-slate-500">观察均值 <MathFormula tex="E(\bar{X})" /></span>
                 <div className="text-sm font-mono font-bold text-slate-900">{sim.observedMean}</div>
                 <span className="text-[10px] text-slate-400">理论值: {sim.theoreticalMean}</span>
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
-                <span className="text-slate-500">标准误差 SE (σ/√n)</span>
+                <span className="text-slate-500">标准误差 <MathFormula tex="\text{SE}(\bar{X})" /></span>
                 <div className="text-sm font-mono font-bold text-slate-900">{sim.observedStd}</div>
-                <span className="text-[10px] text-slate-400">理论值: {sim.theoreticalStd}</span>
+                <span className="text-[10px] text-slate-400">理论值 <MathFormula tex="\sigma/\sqrt{n}" />: {sim.theoreticalStd}</span>
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
@@ -278,7 +278,7 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
                 >
                   {sim.shapiroPValue}
                 </div>
-                <span className="text-[10px] text-slate-400">α = 0.05 临界值</span>
+                <span className="text-[10px] text-slate-400"><MathFormula tex="\alpha = 0.05" /> 临界值</span>
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-0.5">
@@ -302,10 +302,10 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
                   block
                 />
               </div>
-              <div className="text-[11px] text-slate-500 flex flex-wrap justify-around pt-1 font-mono">
-                <span>SE(X̄) = σ / √n = {sim.observedStd}</span>
-                <span>Skewness(X̄) = γ₁ / √n = {sim.skewness}</span>
-                <span>Kurtosis(X̄) = γ₂ / n = {sim.kurtosis}</span>
+              <div className="text-[11px] text-slate-600 flex flex-wrap justify-around pt-1 font-mono gap-2">
+                <span><MathFormula tex={`\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}} = ${sim.observedStd}`} /></span>
+                <span><MathFormula tex={`\\text{Skewness}(\\bar{X}) = \\frac{\\gamma_1}{\\sqrt{n}} = ${sim.skewness}`} /></span>
+                <span><MathFormula tex={`\\text{Kurtosis}(\\bar{X}) = \\frac{\\gamma_2}{n} = ${sim.kurtosis}`} /></span>
               </div>
             </div>
           </div>
@@ -318,7 +318,7 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
             </h4>
             <div className="p-4 bg-white rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
               <div className="p-3 bg-slate-50 rounded-lg space-y-1">
-                <span className="text-slate-500 font-medium">“n ≥ 30 法则”适用性</span>
+                <span className="text-slate-500 font-medium">“<MathFormula tex="n \ge 30" /> 法则”适用性</span>
                 <div
                   className={`font-bold text-xs ${
                     sampleSize >= 30 && !isPassed ? 'text-rose-600' : 'text-slate-800'
@@ -364,18 +364,18 @@ $$\\text{SE}(\\bar{X}) = \\frac{\\sigma}{\\sqrt{n}}, \\quad \\text{Skewness}(\\b
                   基于偏度衰减模型推导的最小安全样本量:
                 </span>
                 <span className="font-mono font-bold text-indigo-700 text-sm bg-white px-2.5 py-0.5 rounded border border-indigo-300">
-                  n_rec ≥ {recommendedN}
+                  <MathFormula tex={`n_{\\text{rec}} \\ge ${recommendedN}`} />
                 </span>
               </div>
               <p className="leading-relaxed">
                 依据公式 <MathFormula tex="n_{\text{rec}} = \max(10, \lceil 28 \cdot \gamma_1^2 \rceil)" /> 推算，总体偏度越大，克服右尾非对称性所需的样本量呈二次方增长。
                 {sampleSize < recommendedN ? (
                   <span className="text-amber-800 font-semibold block mt-1">
-                    当前样本量 (n={sampleSize}) 小于推荐阈值 ({recommendedN})，建议扩充样本或采用 Bootstrap 非参数估计。
+                    当前样本量（<MathFormula tex={`n = ${sampleSize}`} />）小于推荐阈值（<MathFormula tex={`n_{\\text{rec}} = ${recommendedN}`} />），建议扩充样本或采用 Bootstrap 非参数估计。
                   </span>
                 ) : (
                   <span className="text-emerald-800 font-semibold block mt-1">
-                    当前样本量 (n={sampleSize}) 已安全达到推荐阈值 ({recommendedN})。
+                    当前样本量（<MathFormula tex={`n = ${sampleSize}`} />）已安全达到推荐阈值（<MathFormula tex={`n_{\\text{rec}} = ${recommendedN}`} />）。
                   </span>
                 )}
               </p>

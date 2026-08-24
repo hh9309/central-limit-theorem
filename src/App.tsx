@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { TabModule, DistributionType } from './types';
 import { runCLTSimulation } from './lib/mathStats';
 import { Header } from './components/Header';
+import { MathFormula } from './components/MathFormula';
 import { ConceptualGuide } from './components/ConceptualGuide';
 import { MorphingSandbox } from './components/MorphingSandbox';
 import { ClassicCasesBootstrap } from './components/ClassicCasesBootstrap';
@@ -87,8 +88,10 @@ export default function App() {
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200/80 py-4 text-center text-xs text-slate-500 mt-auto">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div>
-            <strong>中心极限定理与高斯涌现智能实验室</strong> · 破除 <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700">n ≥ 30</code> 教条误区
+          <div className="flex items-center gap-1 flex-wrap justify-center">
+            <strong>中心极限定理与高斯涌现智能实验室</strong>
+            <span>·</span>
+            <span>破除“<MathFormula tex="n \ge 30" /> 绝对化”误区</span>
           </div>
           <div className="text-slate-400">
             Powered by Gemini 3.6 Flash & SciPy Engine · 界面淡雅切片布局

@@ -1,6 +1,7 @@
 import React from 'react';
 import { TabModule, DistributionType } from '../types';
 import { DISTRIBUTIONS } from '../lib/mathStats';
+import { MathFormula } from './MathFormula';
 import {
   BookOpen,
   Activity,
@@ -57,8 +58,10 @@ export const Header: React.FC<HeaderProps> = ({
                 v2.0 学术版
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5 font-sans">
-              破除“$n \ge 30$ 绝对化”误区 · 总体偏度与正态收敛速度关系定量分析
+            <p className="text-xs text-slate-500 mt-0.5 font-sans flex items-center gap-1 flex-wrap">
+              <span>破除“<MathFormula tex="n \ge 30" /> 绝对化”误区</span>
+              <span>·</span>
+              <span>总体偏度与正态收敛速度关系定量分析</span>
             </p>
           </div>
 
@@ -76,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Sample Size n Slice */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-lg">
-              <span className="text-slate-400">样本量 n:</span>
+              <span className="text-slate-400">样本量 <MathFormula tex="n" />:</span>
               <span className="font-mono font-bold text-indigo-600">{sampleSize}</span>
               {sampleSize >= distInfo.recommendedN ? (
                 <span className="text-emerald-600 font-medium text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
@@ -84,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               ) : (
                 <span className="text-amber-600 font-medium text-[10px] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                  建议 n≥{distInfo.recommendedN}
+                  建议 <MathFormula tex={isFinite(distInfo.recommendedN) ? `n \\ge ${distInfo.recommendedN}` : 'n \\to \\infty'} />
                 </span>
               )}
             </div>

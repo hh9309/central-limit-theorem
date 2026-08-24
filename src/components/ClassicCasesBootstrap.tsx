@@ -199,7 +199,7 @@ export const ClassicCasesBootstrap: React.FC = () => {
           <div className="p-3 bg-rose-50/60 rounded-lg border border-rose-200/60 space-y-1">
             <div className="font-bold text-rose-800 flex items-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
-              盲套 n=30 正态近似的隐患
+              <span>盲套 <MathFormula tex="n=30" /> 正态近似的隐患</span>
             </div>
             <p className="text-rose-900/80 leading-relaxed">{scenario.n30Pitfall}</p>
           </div>
@@ -207,7 +207,7 @@ export const ClassicCasesBootstrap: React.FC = () => {
           <div className="p-3 bg-emerald-50/60 rounded-lg border border-emerald-200/60 space-y-1">
             <div className="font-bold text-emerald-800 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              Bootstrapping 现代重抽样突破
+              <span>Bootstrapping 现代重抽样突破</span>
             </div>
             <p className="text-emerald-900/80 leading-relaxed">{scenario.bootstrapSolution}</p>
           </div>
@@ -219,12 +219,12 @@ export const ClassicCasesBootstrap: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
           <h3 className="text-base font-bold text-slate-900 font-serif flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-indigo-600" />
-            Bootstrapping 有放回重抽样模拟器 (K = {numBootstraps.toLocaleString()} 次)
+            <span>Bootstrapping 有放回重抽样模拟器 (<MathFormula tex={`K = ${numBootstraps.toLocaleString()}`} /> 次)</span>
           </h3>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 text-xs">
-              <span className="text-slate-500">观测样本量 N:</span>
+              <span className="text-slate-500">观测样本量 <MathFormula tex="N" />:</span>
               <input
                 type="number"
                 min="8"

@@ -396,7 +396,7 @@ export const AiInsights: React.FC<AiInsightsProps> = ({ currentDist, sampleSize 
               检测到输入数据呈{customSkewness > 2 ? '高度偏态' : customSkewness > 0.8 ? '中度偏态' : '对称轻度偏态'}（Skewness = {customSkewness}），传统 <MathFormula tex="n=30" /> 经验法则{customSkewness > 1.2 ? '失效！' : '适用。'}
               {customN < recommendedNLocal && (
                 <span>
-                  若直接在此样本量（n = {customN}）下使用正态近似，将在尾部区间产生约{' '}
+                  若直接在此样本量（<MathFormula tex={`n = ${customN}`} />）下使用正态近似，将在尾部区间产生约{' '}
                   <strong className="text-rose-700 underline font-mono">{probabilityErrorPercent}%</strong> 的概率误差，建议将最小样本量提升至 <MathFormula tex={`n \\ge ${recommendedNLocal}`} />。
                 </span>
               )}
@@ -413,11 +413,11 @@ export const AiInsights: React.FC<AiInsightsProps> = ({ currentDist, sampleSize 
             </div>
 
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/70 space-y-1">
-              <span className="text-slate-500">推荐最小样本量 <MathFormula tex="n_{rec}" /></span>
+              <span className="text-slate-500">推荐最小样本量 <MathFormula tex="n_{\text{rec}}" /></span>
               <div className="text-lg font-mono font-bold text-indigo-600">
-                n ≥ {recommendedNLocal}
+                <MathFormula tex={`n \\ge ${recommendedNLocal}`} />
               </div>
-              <p className="text-[10px] text-slate-400">经验公式 n ≥ 28 · γ₁²</p>
+              <p className="text-[10px] text-slate-400">经验公式 <MathFormula tex="n \ge 28 \cdot \gamma_1^2" /></p>
             </div>
           </div>
         </div>

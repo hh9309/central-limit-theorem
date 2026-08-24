@@ -28,5 +28,15 @@ export const MathFormula: React.FC<MathFormulaProps> = ({
     }
   }, [tex, block]);
 
-  return <span ref={containerRef} className={`inline-block ${className}`} />;
+  if (block) {
+    return <div ref={containerRef} className={`my-2 text-center overflow-x-auto ${className}`} />;
+  }
+
+  return (
+    <span
+      ref={containerRef}
+      className={`inline-flex items-center align-baseline px-0.5 font-normal ${className}`}
+    />
+  );
 };
+

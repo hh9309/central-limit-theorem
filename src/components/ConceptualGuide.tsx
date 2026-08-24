@@ -77,9 +77,9 @@ export const ConceptualGuide: React.FC = () => {
         {/* Slice 2: Dismantling the n>=30 Dogma */}
         <div className="bg-white rounded-xl border border-slate-200/80 p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 font-serif">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-1.5 font-serif">
               <span className="w-2 h-2 rounded-full bg-rose-500" />
-              1.2 破除“$n \ge 30$ 绝对化”误区
+              <span>1.2 破除“<MathFormula tex="n \ge 30" /> 绝对化”误区</span>
             </h3>
             <span className="text-xs px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-medium">
               统计学避坑
@@ -89,7 +89,7 @@ export const ConceptualGuide: React.FC = () => {
           <div className="bg-rose-50/50 border border-rose-200/80 rounded-lg p-4 space-y-3">
             <div className="flex items-center gap-2 text-rose-800 font-bold text-sm">
               <ShieldAlert className="w-4 h-4 text-rose-600" />
-              为何教科书常写 “n ≥ 30 即可正态近似”？
+              <span>为何教科书常写 “<MathFormula tex="n \ge 30" /> 即可正态近似”？</span>
             </div>
             <p className="text-xs text-slate-700 leading-relaxed">
               传统的 <MathFormula tex="n \ge 30" /> 规则源于早期计算资源匮乏时代的经验提炼。**它仅适用于近乎对称或低偏态（<MathFormula tex="|\gamma_1| < 0.5" />）的分布！**
@@ -100,7 +100,7 @@ export const ConceptualGuide: React.FC = () => {
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/60 space-y-1">
               <div className="font-semibold text-slate-800 flex items-center justify-between">
                 <span>轻偏态分布（如均匀分布、二项分布）</span>
-                <span className="text-emerald-600 font-mono">n = 5 ~ 15 达标</span>
+                <span className="text-emerald-600 font-mono"><MathFormula tex="n = 5 \sim 15" /> 达标</span>
               </div>
               <p className="text-slate-500 text-[11px]">对称性强，钟形几乎瞬间涌现，尾部无显著长尾风险。</p>
             </div>
@@ -108,7 +108,7 @@ export const ConceptualGuide: React.FC = () => {
             <div className="p-3 bg-amber-50/60 rounded-lg border border-amber-200/60 space-y-1">
               <div className="font-semibold text-amber-900 flex items-center justify-between">
                 <span>高偏态分布（如金融巨灾理赔、排队等待时间）</span>
-                <span className="text-amber-700 font-mono font-bold">n ≥ 100+ 方可达标</span>
+                <span className="text-amber-700 font-mono font-bold"><MathFormula tex="n \ge 100" />+ 方可达标</span>
               </div>
               <p className="text-amber-800/80 text-[11px]">
                 若硬套 <MathFormula tex="n=30" />，正态近似在右尾（极值概率）会产生 <strong>15%~30% 的严重漏估</strong>！
@@ -259,28 +259,28 @@ export const ConceptualGuide: React.FC = () => {
                 <td className="p-3 font-semibold text-slate-900">连续均匀分布</td>
                 <td className="p-3 font-mono">0.0</td>
                 <td className="p-3"><span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">严重冗余</span></td>
-                <td className="p-3 font-bold font-mono text-indigo-600">n ≥ 5</td>
+                <td className="p-3 font-bold font-mono text-indigo-600"><MathFormula tex="n \ge 5" /></td>
                 <td className="p-3 text-slate-500">传感器随机热噪声</td>
               </tr>
               <tr className="hover:bg-slate-50/50">
                 <td className="p-3 font-semibold text-slate-900">对称二项分布</td>
                 <td className="p-3 font-mono">0.0</td>
                 <td className="p-3"><span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">完全充足</span></td>
-                <td className="p-3 font-bold font-mono text-indigo-600">n ≥ 15</td>
+                <td className="p-3 font-bold font-mono text-indigo-600"><MathFormula tex="n \ge 15" /></td>
                 <td className="p-3 text-slate-500">AB测试二值转化率</td>
               </tr>
               <tr className="hover:bg-slate-50/50">
                 <td className="p-3 font-semibold text-slate-900">指数分布 Exp(λ)</td>
                 <td className="p-3 font-mono">2.0</td>
                 <td className="p-3"><span className="text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">存右尾偏斜</span></td>
-                <td className="p-3 font-bold font-mono text-indigo-600">n ≥ 80 ~ 100</td>
+                <td className="p-3 font-bold font-mono text-indigo-600"><MathFormula tex="n \ge 80 \sim 100" /></td>
                 <td className="p-3 text-slate-500">服务器请求响应延迟</td>
               </tr>
               <tr className="hover:bg-slate-50/50">
                 <td className="p-3 font-semibold text-slate-900">极值理赔分布 Pareto</td>
                 <td className="p-3 font-mono">&gt; 3.5</td>
                 <td className="p-3"><span className="text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">严重失效</span></td>
-                <td className="p-3 font-bold font-mono text-indigo-600">n ≥ 150 ~ 300+</td>
+                <td className="p-3 font-bold font-mono text-indigo-600"><MathFormula tex="n \ge 150 \sim 300+" /></td>
                 <td className="p-3 text-slate-500">保险巨灾理赔、金融风险VaR</td>
               </tr>
             </tbody>
